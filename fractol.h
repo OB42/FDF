@@ -18,7 +18,8 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# define ERR_USAGE				"Usage: ./fractol [fractal_id: 0-2]\n"
+# define FRACS "Mandelbrot: 0 Julia: 1 Burning ship: 2\n"
+# define ERR_USAGE				"Usage: ./fractol [fractal]\n"FRACS
 # define ERR_MALLOC				"malloc error\n"
 # define ERR_NBR_PARSING	"Invalid character after a number\n"
 # define POS_INCREMENT 0.25
@@ -29,7 +30,7 @@
 # define BURNING_SHIP 2
 # define NB_FRACTAL 3
 # define SPEED 0.1
-# define MIN_JULIA_DIFF 21.0f / SIZE
+# define MIN_JULIA_DIFF 10.0f / SIZE
 
 typedef struct		s_p
 {
