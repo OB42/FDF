@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
+/*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obenazzo <obenazzo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,27 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FRACTOL_H
-# define FRACTOL_H
+#ifndef FDF_H
+# define FDF_H
 # include "math.h"
 # include "ft_printf/ft_printf.h"
+# include "get_next_line/get_next_line.h"
 # include "mlx.h"
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# define FRACS "Mandelbrot: 0 Julia: 1 Burning ship: 2\n"
-# define ERR_USAGE				"Usage: ./fractol [fractal]\n"FRACS
+# define ERR_NBR_PARSING		"Invalid character after a number\n"
+# define ERR_USAGE				"Usage: ./fdf <map.fdf>\n"
+# define ERR_FILE_READING 		"Can't read source file\n"
 # define ERR_MALLOC				"malloc error\n"
-# define ERR_NBR_PARSING	"Invalid character after a number\n"
-# define POS_INCREMENT 0.25
-# define SIZE 1024
-# define DEFAULT_ITERATIONS 100
-# define MANDELBROT 0
-# define JULIA 1
-# define BURNING_SHIP 2
-# define NB_FRACTAL 3
-# define SPEED 0.1
-# define MIN_JULIA_DIFF 10.0f / SIZE
+# define ERR_PARSING			"Parsing error\n"
+# define ERR_GNL				"GNL error\n"
+# define ANGLE_INCREMENT 10
+# define POS_INCREMENT 25
+# define WIDTH 1024
+# define HEIGHT 1024
 
 typedef struct		s_p
 {
@@ -56,35 +54,36 @@ enum	e_keys {
 	left = 0x7B,
 	right = 0x7C,
 	esc = 0x35
+
 };
-
-# define SHIP_SHORTCUT k1
-
-enum	e_mouse {
-	scroll_down = 0x4,
-	scroll_up = 0x5
-};
-
-typedef struct		s_fractol
+typedef struct		s_v
 {
+	double			x;
+	double			y;
+	double			z;
+}					t_v;
+
+typedef struct		s_fdf
+{
+	t_v				**map;
+	t_p				dim;
+	t_v				ang;
+	double			zoom;
 	t_p				pos;
-	t_p				julia;
 	void			*win;
 	void			*mlx;
 	void			*img;
-	char			*img_addr;
-	int				line_size;
-	int				endian;
-	int				bits_per_pixel;
-	int				max_iter;
-	int				fract_id;
-	float			zoom;
-}					t_fractol;
+}					t_fdf;
 
+void				draw_line(t_v a, t_v b, t_fdf *fdf);
+t_v					rot(t_v v, t_v a);
+t_p					get_map(char *file, int fd, t_v ***map);
 void				*pr_malloc(size_t n);
 void				pr_free(void *p);
 void				print_error(char *err);
-void				draw_fractal(t_fractol *fractol);
-int					update_image(t_fractol *fractol);
+char				**while_char(char *str, char **words, int save, int w);
+char				**w_char(char *str, char **words, int save, int w);
+char				**split(char *str);
 int					pr_atoi(const char *str);
+void				check_nbr_parsing(char c);
 #endif
